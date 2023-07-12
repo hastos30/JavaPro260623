@@ -21,15 +21,10 @@ public class Burger {
 
     public Burger(boolean bun, boolean meat, boolean cheese, boolean greenery, boolean mayonnaise, boolean doubleMeat) {
         this.bun = bun ? Ingredient.BUN : null;
+        this.meat = doubleMeat ? Ingredient.DOUBLE_MEAT : (meat ? Ingredient.MEAT : null);
         this.cheese = cheese ? Ingredient.CHEESE : null;
         this.greenery = greenery ? Ingredient.GREENERY : null;
         this.mayonnaise = mayonnaise ? Ingredient.MAYONNAISE : null;
-
-        if (doubleMeat) {
-            this.meat = Ingredient.DOUBLE_MEAT;
-        } else {
-            this.meat = meat ? Ingredient.MEAT : null;
-        }
 
         printIngredients();
     }
