@@ -12,50 +12,34 @@ public class Burger {
     private Ingredient mayonnaise;
 
     public Burger() {
-        this.bun = Ingredient.BUN;
-        this.meat = Ingredient.MEAT;
-        this.cheese = Ingredient.CHEESE;
-        this.greenery = Ingredient.GREENERY;
-        this.mayonnaise = Ingredient.MAYONNAISE;
-        printIngredients();
+        this(true, true, true, true, true, false);
     }
 
     public Burger(boolean bun, boolean meat, boolean cheese, boolean greenery) {
-        this.bun = bun ? Ingredient.BUN : null;
-        this.meat = meat ? Ingredient.MEAT : null;
-        this.cheese = cheese ? Ingredient.CHEESE : null;
-        this.greenery = greenery ? Ingredient.GREENERY : null;
-        this.mayonnaise = null;
-        printIngredients();
+        this(bun, meat, cheese, greenery, false, false);
     }
 
     public Burger(boolean bun, boolean meat, boolean cheese, boolean greenery, boolean mayonnaise, boolean doubleMeat) {
         this.bun = bun ? Ingredient.BUN : null;
-        this.meat = doubleMeat ? Ingredient.DOUBLE_MEAT : (meat ? Ingredient.MEAT : null);
         this.cheese = cheese ? Ingredient.CHEESE : null;
         this.greenery = greenery ? Ingredient.GREENERY : null;
         this.mayonnaise = mayonnaise ? Ingredient.MAYONNAISE : null;
+
+        if (doubleMeat) {
+            this.meat = Ingredient.DOUBLE_MEAT;
+        } else {
+            this.meat = meat ? Ingredient.MEAT : null;
+        }
+
         printIngredients();
     }
 
     private void printIngredients() {
         System.out.println("\tСклад бургера:");
         System.out.println("Булочка - " + bun);
-        System.out.println("М'ясо   - " + (meat != Ingredient.DOUBLE_MEAT ? meat : "n/a"));
-
-        /*
-        Я не знаю какую структуру лучше выбрать, потому закоментирую один из способов.
-        Я бы улучшил код и сделал проверку на все что угодно, но в задании такого не написано :)
-        */
-
-        /*if (meat == Ingredient.DOUBLE_MEAT) {
-            System.out.println("М'ясо   - " + Ingredient.DOUBLE_MEAT);
-        } else {
-            System.out.println("М'ясо   - " + meat);
-        }*/
+        System.out.println("М'ясо   - " + (meat != null ? meat : "n/a"));
         System.out.println("Сир     - " + cheese);
         System.out.println("Зелень  - " + greenery);
-
         System.out.println("Майонез - " + (mayonnaise != null ? Ingredient.MAYONNAISE : "n/a"));
         System.out.println();
     }
