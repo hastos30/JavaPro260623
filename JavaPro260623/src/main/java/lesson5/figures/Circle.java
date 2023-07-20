@@ -1,8 +1,7 @@
 package lesson5.figures;
 
-public class Circle implements Figure{
+public class Circle implements Figure {
 
-    private double Pi = 3.14;
     private double radius;
 
     public Circle(double radius) {
@@ -11,6 +10,6 @@ public class Circle implements Figure{
 
     @Override
     public double area() {
-        return Pi * radius * radius;
+        return Math.pow(radius, 2) * Math.PI;
     }
 }
