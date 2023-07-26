@@ -16,6 +16,7 @@ public class Cat implements Participant {
 
     @Override
     public void jump() {
+
         System.out.println("Учасник " + name + " стрибає!");
     }
 
