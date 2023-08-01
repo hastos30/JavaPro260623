@@ -7,11 +7,11 @@ public class Main {
         Orange orange1 = new Orange();
         Orange orange2 = new Orange();
 
-        Box<Apple> appleBox = new Box<>();
+        Box<Apple> appleBox = new Box<>(10);
         appleBox.addFruit(apple1);
         appleBox.addFruit(apple2);
 
-        Box<Orange> orangeBox = new Box<>();
+        Box<Orange> orangeBox = new Box<>(15);
         orangeBox.addFruit(orange1);
         orangeBox.addFruit(orange2);
 
@@ -20,7 +20,7 @@ public class Main {
 
         System.out.println("Являются ли коробки одинаковыми по весу? " + appleBox.compare(orangeBox));
 
-        Box<Apple> appleBox2 = new Box<>();
+        Box<Apple> appleBox2 = new Box<>(10);
         appleBox2.addFruit(new Apple());
 
         System.out.println("Обьеденение коробки appleBox2 в appleBox...");
