@@ -13,11 +13,20 @@ public class Box<T extends Fruit> {
     }
 
     public void addFruit(T fruit) {
-        fruits.add(fruit);
+        if (fruits.size() < capacity) {
+            fruits.add(fruit);
+        } else {
+            System.out.println("Коробка заполнена. Невозможно добавить еще фруктов.");
+        }
     }
 
     public void addFruits(List<T> newFruits) {
-        fruits.addAll(newFruits);
+        int spaceLeft = capacity - fruits.size();
+        if (spaceLeft >= newFruits.size()) {
+            fruits.addAll(newFruits);
+        } else {
+            System.out.println("Недостаточно места в коробке для добавления всех фруктов.");
+        }
     }
 
     public float getWeight() {
