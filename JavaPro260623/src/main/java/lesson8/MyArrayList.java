@@ -13,6 +13,14 @@ public class MyArrayList<E> implements List<E> {
         size = 0;
     }
 
+    MyArrayList(int initialCapacity) {
+        if (initialCapacity < 0) {
+            throw new IllegalArgumentException("Розмір має бути не менше 0: " + initialCapacity);
+        }
+        elements = new Object[initialCapacity];
+        size = 0;
+    }
+
     @Override
     public int size() {
         return size;
@@ -35,7 +43,7 @@ public class MyArrayList<E> implements List<E> {
 
     @Override
     public Iterator<E> iterator() {
-        return null;
+        return new MyIterator();
     }
 
     @Override
@@ -45,7 +53,14 @@ public class MyArrayList<E> implements List<E> {
 
     @Override
     public <T> T[] toArray(T[] a) {
-        return null;
+        if (a.length < size) {
+            return (T[]) Arrays.copyOf(elements, size, a.getClass());
+        }
+        System.arraycopy(elements, 0, a, 0, size);
+        if (a.length > size) {
+            a[size] = null;
+        }
+        return a;
     }
 
     @Override
@@ -68,27 +83,71 @@ public class MyArrayList<E> implements List<E> {
 
     @Override
     public boolean containsAll(Collection<?> c) {
-        return false;
+        for (Object element : c) {
+            if (!contains(element)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @Override
     public boolean addAll(Collection<? extends E> c) {
-        return false;
+        if (c.isEmpty()) {
+            return false;
+        }
+        ensureCapacity(size + c.size());
+        for (E element : c) {
+            elements[size++] = element;
+        }
+        return true;
     }
 
     @Override
     public boolean addAll(int index, Collection<? extends E> c) {
-        return false;
+        if (index > size || index < 0) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+        }
+        if (c.isEmpty()) {
+            return false;
+        }
+        ensureCapacity(size + c.size());
+
+        System.arraycopy(elements, index, elements, index + c.size(), size - index);
+
+        int i = index;
+        for (E element : c) {
+            elements[i++] = element;
+        }
+
+        size += c.size();
+        return true;
     }
 
     @Override
     public boolean removeAll(Collection<?> c) {
-        return false;
+        boolean modified = false;
+        for (int i = 0; i < size; i++) {
+            if (c.contains(elements[i])) {
+                removeAtIndex(i);
+                i--;
+                modified = true;
+            }
+        }
+        return modified;
     }
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        return false;
+        boolean modified = false;
+        for (int i = 0; i < size; i++) {
+            if (!c.contains(elements[i])) {
+                removeAtIndex(i);
+                i--;
+                modified = true;
+            }
+        }
+        return modified;
     }
 
     @Override
@@ -140,27 +199,47 @@ public class MyArrayList<E> implements List<E> {
 
     @Override
     public int indexOf(Object o) {
-        return 0;
+        for (int i = 0; i < size; i++) {
+            if (o.equals(elements[i])) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     @Override
     public int lastIndexOf(Object o) {
-        return 0;
+        for (int i = size - 1; i >= 0; i--) {
+            if (o.equals(elements[i])) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     @Override
     public ListIterator<E> listIterator() {
-        return null;
+        return new MyListIterator(0);
     }
 
     @Override
     public ListIterator<E> listIterator(int index) {
-        return null;
+        if (index < 0 || index > size) {
+            throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + size);
+        }
+        return new MyListIterator(index);
     }
 
     @Override
     public List<E> subList(int fromIndex, int toIndex) {
-        return null;
+        if (fromIndex < 0 || toIndex > size || fromIndex > toIndex) {
+            throw new IndexOutOfBoundsException();
+        }
+        MyArrayList<E> subList = new MyArrayList<>();
+        for (int i = fromIndex; i < toIndex; i++) {
+            subList.add((E) elements[i]);
+        }
+        return subList;
     }
 
     private void removeAtIndex(int index) {
@@ -183,6 +262,91 @@ public class MyArrayList<E> implements List<E> {
                 newCapacity = minCapacity;
             }
             elements = Arrays.copyOf(elements, newCapacity);
+        }
+    }
+
+    private class MyIterator implements Iterator<E> {
+        private int currentIndex = 0;
+
+        @Override
+        public boolean hasNext() {
+            return currentIndex < size;
+        }
+
+        @Override
+        public E next() {
+            if (hasNext()) {
+                return (E) elements[currentIndex++];
+            }
+            throw new NoSuchElementException();
+        }
+
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException("Remove operation is not supported by this iterator.");
+        }
+    }
+
+    private class MyListIterator implements ListIterator<E> {
+        private int currentIndex;
+
+        MyListIterator(int index) {
+            currentIndex = index;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return currentIndex < size;
+        }
+
+        @Override
+        public E next() {
+            if (hasNext()) {
+                return (E) elements[currentIndex++];
+            }
+            throw new NoSuchElementException();
+        }
+
+        @Override
+        public boolean hasPrevious() {
+            return currentIndex > 0;
+        }
+
+        @Override
+        public E previous() {
+            if (hasPrevious()) {
+                return (E) elements[--currentIndex];
+            }
+            throw new NoSuchElementException();
+        }
+
+        @Override
+        public int nextIndex() {
+            return currentIndex;
+        }
+
+        @Override
+        public int previousIndex() {
+            return currentIndex - 1;
+        }
+
+        @Override
+        public void remove() {
+            throw new UnsupportedOperationException("Remove operation is not supported by this iterator.");
+        }
+
+        @Override
+        public void set(E e) {
+            if (currentIndex > 0 && currentIndex <= size) {
+                elements[currentIndex - 1] = e;
+            } else {
+                throw new IllegalStateException();
+            }
+        }
+
+        @Override
+        public void add(E e) {
+            MyArrayList.this.add(currentIndex++, e);
         }
     }
 }
