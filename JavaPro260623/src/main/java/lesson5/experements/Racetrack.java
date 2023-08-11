@@ -1,7 +1,6 @@
 package main.java.lesson5.experements;
 
-public class Racetrack implements Obstacle{
-
+public class Racetrack implements Obstacle {
     private int length;
 
     public Racetrack(int length) {
@@ -11,6 +10,11 @@ public class Racetrack implements Obstacle{
     @Override
     public void overcome(Participant participant) {
         participant.run();
-        System.out.println("Пройшов " + length + " метрів по біговій доріжці");
+        System.out.println("Пройшов Бігова доріжка довжиною " + length + " метрів");
+        participant.reduceStamina(length);
+    }
+
+    public int getLength() {
+        return length;
     }
 }
