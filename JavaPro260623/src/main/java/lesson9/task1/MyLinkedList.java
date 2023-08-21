@@ -1,4 +1,4 @@
-package main.java.lesson9;
+package main.java.lesson9.task1;
 
 import java.util.*;
 
@@ -349,33 +349,5 @@ public class MyLinkedList<T> implements List<T> {
         }
         sb.append("]");
         return sb.toString();
-    }
-
-    public int countOccurance(List<String> wordList, String target) {
-        int count = 0;
-        for (String word : wordList) {
-            if (word.equals(target)) {
-                count++;
-            }
-        }
-        return count;
-    }
-
-    public static <E> List<E> toList(E[] array) {
-        List<E> list = new MyLinkedList<>();
-        Collections.addAll(list, array);
-        return list;
-    }
-
-    public static List<Integer> findUnique(List<Integer> numberList) {
-        Set<Integer> uniqueSet = new HashSet<>();
-        List<Integer> uniqueList = new MyLinkedList<>();
-        for (Integer number : numberList) {
-            if (!uniqueSet.contains(number)) {
-                uniqueSet.add(number);
-                uniqueList.add(number);
-            }
-        }
-        return uniqueList;
     }
 }
