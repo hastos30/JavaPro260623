@@ -1,4 +1,4 @@
-package main.java.lesson9.tast1;
+package main.java.lesson9.task1;
 
 import java.util.*;
 
