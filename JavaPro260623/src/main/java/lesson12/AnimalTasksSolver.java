@@ -1,12 +1,12 @@
 package main.java.lesson12;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class AnimalTasksSolver {
 
     public static void main(String[] args) {
         List<String> wildAnimals = Arrays.asList("Lion", "Tiger", "Elephant", "Giraffe");
-
         List<String> pets = Arrays.asList("Dog", "Cat", "Fish", "Parrot");
 
         Map<String, Integer> animalLegs = new HashMap<>();
@@ -30,52 +30,44 @@ public class AnimalTasksSolver {
         Map<Integer, List<String>> groupedAnimals = groupAnimalsByLegs(randomAnimals, animalLegs);
         System.out.println("Animals grouped by number of legs: " + groupedAnimals);
 
-        Map<String, Integer> speciesCount = countAnimalsBySpecies(randomAnimals);
-        System.out.println("Species count: " + speciesCount);
-
-        int speciesCountTotal = speciesCount.size();
-        System.out.println("Total number of species: " + speciesCountTotal);
+        Map<String, Long> speciesCount = countAnimalsBySpecies(randomAnimals);
+        System.out.println("Species count: " + speciesCount.size());
     }
 
     private static String findAnimalWithMostLegs(Map<String, Integer> animalLegs) {
-        return Collections.max(animalLegs.entrySet(), Map.Entry.comparingByValue()).getKey();
+        return animalLegs.entrySet()
+                .stream()
+                .max(Comparator.comparing(Map.Entry::getValue))
+                .map(Map.Entry::getKey)
+                .orElse("No animals found");
     }
 
     private static List<String> generateRandomAnimals(int count) {
-        List<String> animals = new ArrayList<>();
         Random random = new Random();
         List<String> availableSpecies = Arrays.asList("Lion", "Tiger", "Elephant", "Giraffe", "Dog", "Cat", "Fish", "Parrot");
 
-        for (int i = 0; i < count; i++) {
-            String randomSpecies = availableSpecies.get(random.nextInt(availableSpecies.size()));
-            animals.add(randomSpecies);
-        }
-
-        return animals;
+        return random.ints(count, 0, availableSpecies.size())
+                .mapToObj(availableSpecies::get)
+                .collect(Collectors.toList());
     }
 
     private static int calculateTotalLegs(List<String> animals, Map<String, Integer> animalLegs) {
-        int totalLegs = 0;
-        for (String animal : animals) {
-            totalLegs += animalLegs.getOrDefault(animal, 0);
-        }
-        return totalLegs;
+        return animals.stream()
+                .map(animalLegs::get)
+                .mapToInt(Integer::intValue)
+                .sum();
     }
 
     private static Map<Integer, List<String>> groupAnimalsByLegs(List<String> animals, Map<String, Integer> animalLegs) {
-        Map<Integer, List<String>> groupedAnimals = new HashMap<>();
-        for (String animal : animals) {
-            int legs = animalLegs.getOrDefault(animal, 0);
-            groupedAnimals.computeIfAbsent(legs, k -> new ArrayList<>()).add(animal);
-        }
-        return groupedAnimals;
+        return animals.stream()
+                .collect(Collectors.groupingBy(animalLegs::get));
     }
 
-    private static Map<String, Integer> countAnimalsBySpecies(List<String> animals) {
-        Map<String, Integer> speciesCount = new HashMap<>();
-        for (String animal : animals) {
-            speciesCount.put(animal, speciesCount.getOrDefault(animal, 0) + 1);
-        }
-        return speciesCount;
-    }}
-
+    private static Map<String, Long> countAnimalsBySpecies(List<String> animals) {
+        return animals.stream()
+                .collect(Collectors.groupingBy(
+                        animal -> animal,
+                        Collectors.counting()
+                ));
+    }
+}
