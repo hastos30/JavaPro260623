@@ -1,49 +1,60 @@
 package main.java.lesson13;
 
+import java.lang.annotation.*;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
-public class TestRunner {
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+@interface Test {
+    int priority() default 5;
+}
+
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+@interface BeforeSuite {
+}
+
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+@interface AfterSuite {
+}
+
+class TestRunner {
     public static void start(Class<?> testClass) {
         try {
-            Object instance = testClass.getDeclaredConstructor().newInstance();
+            Object testInstance = testClass.getDeclaredConstructor().newInstance();
+            Method[] methods = testClass.getDeclaredMethods();
 
-            Method beforeSuiteMethod = null;
-            Method afterSuiteMethod = null;
-            List<Method> testMethods = new ArrayList<>();
+            // Розділити методи на BeforeSuite, Test та AfterSuite
+            List<Method> beforeSuiteMethods = Arrays.stream(methods)
+                    .filter(method -> method.isAnnotationPresent(BeforeSuite.class))
+                    .collect(Collectors.toList());
 
-            for (Method method : testClass.getDeclaredMethods()) {
-                if (method.isAnnotationPresent(CastomAnnotation.BeforeSuite.class)) {
-                    if (beforeSuiteMethod == null) {
-                        beforeSuiteMethod = method;
-                    } else {
-                        throw new RuntimeException("Multiple @BeforeSuite methods found.");
-                    }
-                } else if (method.isAnnotationPresent(CastomAnnotation.AfterSuite.class)) {
-                    if (afterSuiteMethod == null) {
-                        afterSuiteMethod = method;
-                    } else {
-                        throw new RuntimeException("Multiple @AfterSuite methods found.");
-                    }
-                } else if (method.isAnnotationPresent(CastomAnnotation.Test.class)) {
-                    testMethods.add(method);
-                }
+            List<Method> testMethods = Arrays.stream(methods)
+                    .filter(method -> method.isAnnotationPresent(Test.class))
+                    .sorted(Comparator.comparingInt(method -> method.getAnnotation(Test.class).priority()))
+                    .collect(Collectors.toList());
+
+            List<Method> afterSuiteMethods = Arrays.stream(methods)
+                    .filter(method -> method.isAnnotationPresent(AfterSuite.class))
+                    .collect(Collectors.toList());
+
+            if (beforeSuiteMethods.size() > 1 || afterSuiteMethods.size() > 1) {
+                throw new RuntimeException("Помилка: BeforeSuite або AfterSuite повинні бути присутніми лише в єдиному екземплярі.");
             }
 
-            testMethods.sort(Comparator.comparingInt(m -> m.getAnnotation(CastomAnnotation.Test.class).priority()));
-
-            if (beforeSuiteMethod != null) {
-                beforeSuiteMethod.invoke(instance);
+            if (!beforeSuiteMethods.isEmpty()) {
+                beforeSuiteMethods.get(0).invoke(testInstance);
             }
 
             for (Method testMethod : testMethods) {
-                testMethod.invoke(instance);
+                testMethod.invoke(testInstance);
             }
 
-            if (afterSuiteMethod != null) {
-                afterSuiteMethod.invoke(instance);
+            if (!afterSuiteMethods.isEmpty()) {
+                afterSuiteMethods.get(0).invoke(testInstance);
             }
         } catch (Exception e) {
             e.printStackTrace();
