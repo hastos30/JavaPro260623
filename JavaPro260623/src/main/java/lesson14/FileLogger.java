@@ -6,11 +6,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-<<<<<<< HEAD
-public class FileLogger {
-=======
 public class FileLogger implements Logger {
->>>>>>> lesson14.1
     private FileLoggerConfiguration configuration;
     private FileWriter currentFileWriter;
     private int fileCounter;
@@ -21,20 +17,14 @@ public class FileLogger implements Logger {
         createNewLogFile();
     }
 
-<<<<<<< HEAD
-=======
     @Override
->>>>>>> lesson14.1
     public void debug(String message) throws FileMaxSizeReachedException, IOException {
         if (configuration.getCurrentLogLevel().includesDebug()) {
             log("[DEBUG] " + message);
         }
     }
 
-<<<<<<< HEAD
-=======
     @Override
->>>>>>> lesson14.1
     public void info(String message) throws FileMaxSizeReachedException, IOException {
         if (configuration.getCurrentLogLevel().includesInfo()) {
             log("[INFO] " + message);

@@ -47,8 +47,4 @@ public class FileLoggerConfiguration {
     public void setLogFormat(String logFormat) {
         this.logFormat = logFormat;
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> lesson14.1
