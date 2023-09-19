@@ -5,7 +5,7 @@ import main.java.lesson15.devices.Device;
 public class OnState implements DeviceState {
     @Override
     public void turnOn(Device device) {
-        System.out.println(device.getName() + " уже включен.");
+        System.out.println(device.getName() + " включен.");
     }
 
     @Override

@@ -11,6 +11,6 @@ public class OffState implements DeviceState {
 
     @Override
     public void turnOff(Device device) {
-        System.out.println(device.getName() + " уже выключен.");
+        System.out.println(device.getName() + " выключен.");
     }
 }
