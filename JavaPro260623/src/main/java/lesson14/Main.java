@@ -6,7 +6,12 @@ public class Main {
     public static void main(String[] args) {
         try {
             FileLoggerConfiguration configuration = new FileLoggerConfiguration(
-                    "Log", LoggingLevel.DEBUG, 1024, "yyyy-MM-dd HH:mm:ss"
+                    "Log", LoggingLevel.DEBUG, 1024,
+                    "yyyy-MM-dd HH:mm:ss",
+                    "[ClassName]",
+                    "[Time]",
+                    "[MessageColor]",
+                    "[LoggingLevel]"
             );
 
             FileLogger logger = new FileLogger(configuration);
