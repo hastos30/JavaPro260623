@@ -19,6 +19,22 @@ public class Main {
             for (int i = 0; i < 10000; i++) {
                 logger.debug("Це повідомлення для рівня DEBUG.");
                 logger.info("Це повідомлення для рівня INFO.");
+            FileLoggerConfiguration fileLoggerConfig = new FileLoggerConfiguration(
+                    "Log", LoggingLevel.DEBUG, 1024, "yyyy-MM-dd HH:mm:ss"
+            );
+
+            Logger fileLogger = new FileLogger(fileLoggerConfig);
+
+            for (int i = 0; i < 10000; i++) {
+                fileLogger.debug("Це повідомлення для рівня DEBUG.");
+                fileLogger.info("Це повідомлення для рівня INFO.");
+            }
+
+            Logger consoleLogger = new ConsoleLogger();
+
+            for (int i = 0; i < 10; i++) {
+                consoleLogger.debug("Це повідомлення для рівня DEBUG (консоль).");
+                consoleLogger.info("Це повідомлення для рівня INFO (консоль).");
             }
         } catch (IOException e) {
             System.err.println("Помилка під час створення логера: " + e.getMessage());

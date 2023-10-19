@@ -5,6 +5,7 @@ public class FileLoggerConfiguration {
     private LoggingLevel currentLogLevel;
     private long maxFileSize;
     private String logFormat;
+
     private String classNamePattern;
     private String timePattern;
     private String messageColorPattern;
@@ -13,15 +14,19 @@ public class FileLoggerConfiguration {
     public FileLoggerConfiguration(String logFilePath,
                                    LoggingLevel currentLogLevel,
                                    long maxFileSize,
+
                                    String logFormat,
                                    String classNamePattern,
                                    String timePattern,
                                    String messageColorPattern,
                                    String loggingLevelPattern) {
+
+                                   String logFormat) {
         this.logFilePath = logFilePath;
         this.currentLogLevel = currentLogLevel;
         this.maxFileSize = maxFileSize;
         this.logFormat = logFormat;
+
         this.classNamePattern = classNamePattern;
         this.timePattern = timePattern;
         this.messageColorPattern = messageColorPattern;
@@ -59,6 +64,7 @@ public class FileLoggerConfiguration {
     public void setLogFormat(String logFormat) {
         this.logFormat = logFormat;
     }
+
 
     public String getClassNamePattern() {
         return classNamePattern;
