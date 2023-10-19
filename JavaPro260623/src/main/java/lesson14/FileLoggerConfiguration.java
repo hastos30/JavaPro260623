@@ -6,14 +6,31 @@ public class FileLoggerConfiguration {
     private long maxFileSize;
     private String logFormat;
 
+    private String classNamePattern;
+    private String timePattern;
+    private String messageColorPattern;
+    private String loggingLevelPattern;
+
     public FileLoggerConfiguration(String logFilePath,
                                    LoggingLevel currentLogLevel,
                                    long maxFileSize,
+
+                                   String logFormat,
+                                   String classNamePattern,
+                                   String timePattern,
+                                   String messageColorPattern,
+                                   String loggingLevelPattern) {
+
                                    String logFormat) {
         this.logFilePath = logFilePath;
         this.currentLogLevel = currentLogLevel;
         this.maxFileSize = maxFileSize;
         this.logFormat = logFormat;
+
+        this.classNamePattern = classNamePattern;
+        this.timePattern = timePattern;
+        this.messageColorPattern = messageColorPattern;
+        this.loggingLevelPattern = loggingLevelPattern;
     }
 
     public String getLogFilePath() {
@@ -46,5 +63,38 @@ public class FileLoggerConfiguration {
 
     public void setLogFormat(String logFormat) {
         this.logFormat = logFormat;
+    }
+
+
+    public String getClassNamePattern() {
+        return classNamePattern;
+    }
+
+    public void setClassNamePattern(String classNamePattern) {
+        this.classNamePattern = classNamePattern;
+    }
+
+    public String getTimePattern() {
+        return timePattern;
+    }
+
+    public void setTimePattern(String timePattern) {
+        this.timePattern = timePattern;
+    }
+
+    public String getMessageColorPattern() {
+        return messageColorPattern;
+    }
+
+    public void setMessageColorPattern(String messageColorPattern) {
+        this.messageColorPattern = messageColorPattern;
+    }
+
+    public String getLoggingLevelPattern() {
+        return loggingLevelPattern;
+    }
+
+    public void setLoggingLevelPattern(String loggingLevelPattern) {
+        this.loggingLevelPattern = loggingLevelPattern;
     }
 }

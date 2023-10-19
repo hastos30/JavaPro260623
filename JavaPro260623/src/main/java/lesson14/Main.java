@@ -5,6 +5,20 @@ import java.io.IOException;
 public class Main {
     public static void main(String[] args) {
         try {
+            FileLoggerConfiguration configuration = new FileLoggerConfiguration(
+                    "Log", LoggingLevel.DEBUG, 1024,
+                    "yyyy-MM-dd HH:mm:ss",
+                    "[ClassName]",
+                    "[Time]",
+                    "[MessageColor]",
+                    "[LoggingLevel]"
+            );
+
+            FileLogger logger = new FileLogger(configuration);
+
+            for (int i = 0; i < 10000; i++) {
+                logger.debug("Це повідомлення для рівня DEBUG.");
+                logger.info("Це повідомлення для рівня INFO.");
             FileLoggerConfiguration fileLoggerConfig = new FileLoggerConfiguration(
                     "Log", LoggingLevel.DEBUG, 1024, "yyyy-MM-dd HH:mm:ss"
             );
